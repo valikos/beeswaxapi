@@ -40,9 +40,9 @@ module BeeswaxAPI
         )
       end
 
-      if opt.key?[:body_params]
-        opt[:body] = Yajl.dump(opt[:body_params])
-        opt.delete(:body_params)
+      if opts.key?[:body_params]
+        opts[:body] = Yajl.dump(opts[:body_params])
+        opts.delete(:body_params)
       end
 
       request = Typhoeus::Request.new(target_url, opts)

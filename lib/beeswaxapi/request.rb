@@ -24,7 +24,12 @@ module BeeswaxAPI
     end
     
     def request_for(**opts)
+      # TODO: better url constructor
       target_url = [App.config.base_uri, @path].join('/')
+
+      if opts.has_key? :path
+        target_url = [target_url, opts.delete(:path)].join('/')
+      end
 
       # configure basic auth request
       if App.config.basic_auth
@@ -41,8 +46,7 @@ module BeeswaxAPI
       end
 
       if opts.has_key? :body_params
-        opts[:body] = Yajl.dump(opts[:body_params])
-        opts.delete :body_params
+        opts[:body] = Yajl.dump(opts.delete(:body_params))
       end
 
       request = Typhoeus::Request.new(target_url, opts)

@@ -1,6 +1,6 @@
-RSpec.describe Beeswaxapi do
+RSpec.describe BeeswaxAPI do
   it "has a version number" do
-    expect(Beeswaxapi::VERSION).not_to be nil
+    expect(BeeswaxAPI::VERSION).not_to be nil
   end
 
   it "does something useful" do

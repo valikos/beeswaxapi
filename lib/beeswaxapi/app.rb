@@ -16,6 +16,6 @@ module BeeswaxAPI
     setting :base_uri
     setting :user_name
     setting :password
-    setting :verbose_logger
+    setting :verbose_logger, false
   end
 end

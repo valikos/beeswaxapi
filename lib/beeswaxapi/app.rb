@@ -8,6 +8,7 @@ module BeeswaxAPI
     # base_uri:          base url for api
     # user_name:         user email
     # password:          user password
+    # verbose_logger:    turns on verbose logs from curl
 
     setting :basic_auth, false 
     setting :cookie_auth, false
@@ -15,5 +16,6 @@ module BeeswaxAPI
     setting :base_uri
     setting :user_name
     setting :password
+    setting :verbose_logger
   end
 end

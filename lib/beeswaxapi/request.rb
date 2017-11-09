@@ -49,6 +49,10 @@ module BeeswaxAPI
         opts[:body] = Yajl.dump(opts.delete(:body_params))
       end
 
+      if App.config.verbose_logger
+        opts[:verbose] = true
+      end
+
       request = Typhoeus::Request.new(target_url, opts)
       
       request.on_complete do |response|

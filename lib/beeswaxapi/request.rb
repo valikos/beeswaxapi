@@ -49,13 +49,17 @@ module BeeswaxAPI
         opts[:body] = Yajl.dump(opts.delete(:body_params))
       end
 
-      if App.config.verbose_logger
-        opts[:verbose] = true
-      end
-
       request = Typhoeus::Request.new(target_url, opts)
       
+      if App.config.logger
+        App.config.logger.info before_request_log(target_url, opts)
+      end
+
       request.on_complete do |response|
+        if App.config.logger
+          App.config.logger.info after_request_log(target_url, opts, response)
+        end
+
         if response.success?
           return success_response_handler(response)
         elsif response.timed_out?
@@ -69,6 +73,20 @@ module BeeswaxAPI
     end
 
     private
+
+    def before_request_log(target_url, opts)
+      <<~LOG
+      Start request #{opts[:method].upcase} #{target_url}
+      #{opts[:body] if opts[:body]}
+      LOG
+    end
+
+    def after_request_log(target_url, opts, response)
+      <<~LOG
+      Finish request #{opts[:method].upcase} #{target_url}
+      #{response.body}
+      LOG
+    end
 
     def parsed_body(body)
       Yajl.load(body, symbolize_keys: true)

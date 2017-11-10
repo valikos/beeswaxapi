@@ -1,7 +1,7 @@
 RSpec.describe BeeswaxAPI::App do
   %i[
     basic_auth cookie_auth cookie_file base_uri 
-    user_name password verbose_logger
+    user_name password logger
   ].each do |config|
     it "contains #{config} config option" do
       expect(described_class.settings).to include config
@@ -32,7 +32,7 @@ RSpec.describe BeeswaxAPI::App do
     described_class.config.password = 'password'
   end
 
-  it 'setups verbose_logger configuration' do
-    described_class.config.verbose_logger = true
+  it 'setups logger configuration' do
+    described_class.config.logger = double
   end
 end

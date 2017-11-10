@@ -1,6 +1,7 @@
 require 'beeswaxapi/endpoints/advertiser'
 require 'beeswaxapi/endpoints/authenticate'
 require 'beeswaxapi/endpoints/campaign'
+require 'beeswaxapi/endpoints/creative_asset'
 require 'beeswaxapi/endpoints/creative_bulk_upload'
 require 'beeswaxapi/endpoints/creative_bulk_upload/upload'
 require 'beeswaxapi/endpoints/creative_line_item'

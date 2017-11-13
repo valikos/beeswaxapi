@@ -22,7 +22,7 @@ module BeeswaxAPI
       opts[:method] = :delete
       request_for(opts, &block)
     end
-    
+
     def request_for(**opts)
       # TODO: better url constructor
       target_url = [App.config.base_uri, @path].join('/')
@@ -36,11 +36,11 @@ module BeeswaxAPI
         userpwd = "#{App.config.user_name}:#{App.config.password}"
         opts[:userpwd] = userpwd
       end
-      
+
       # configure cookie request
       if App.config.cookie_auth
         opts = opts.merge(
-          cookiefile: App.config.cookie_file,    
+          cookiefile: App.config.cookie_file,
           cookiejar: App.config.cookie_file
         )
       end
@@ -50,7 +50,7 @@ module BeeswaxAPI
       end
 
       request = Typhoeus::Request.new(target_url, opts)
-      
+
       if App.config.logger
         App.config.logger.info before_request_log(target_url, opts)
       end
@@ -74,17 +74,19 @@ module BeeswaxAPI
 
     private
 
+    # TODO: improve heredoc formatting
     def before_request_log(target_url, opts)
-      <<~LOG
-      Start request #{opts[:method].upcase} #{target_url}
-      #{opts[:body] if opts[:body]}
+      <<-LOG
+Start request #{opts[:method].upcase} #{target_url}
+#{opts[:body] if opts[:body]}
       LOG
     end
 
+    # TODO: improve heredoc formatting
     def after_request_log(target_url, opts, response)
-      <<~LOG
-      Finish request #{opts[:method].upcase} #{target_url}
-      #{response.body}
+      <<-LOG
+Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
+#{response.body}
       LOG
     end
 

@@ -1,6 +1,6 @@
 RSpec.describe BeeswaxAPI::App do
   %i[
-    basic_auth cookie_auth cookie_file base_uri 
+    auth_strategy cookie_file base_uri
     user_name password logger
   ].each do |config|
     it "contains #{config} config option" do
@@ -8,31 +8,29 @@ RSpec.describe BeeswaxAPI::App do
     end
   end
 
-  it 'setups basic_auth configuration' do
-    described_class.config.basic_auth = true
-  end
+  describe 'defaults' do
+    it 'returns "basic" for auth_strategy' do
+      expect(described_class.config.auth_strategy).to eq 'basic'
+    end
 
-  it 'setups cookie_auth configuration' do
-    described_class.config.cookie_auth = true
-  end
+    it 'returns nil for cookie_file' do
+      expect(described_class.config.cookie_file).to eq nil
+    end
 
-  it 'setups cookie_file configuration' do
-    described_class.config.cookie_file = '/tmp/cookies.txt'
-  end
+    it 'returns nil for base_uri' do
+      expect(described_class.config.base_uri).to eq nil
+    end
 
-  it 'setups base_uri configuration' do
-    described_class.config.base_uri = 'https://sandbox.beeswax.api.com/rest'
-  end
+    it 'returns nil for user_name' do
+      expect(described_class.config.user_name).to eq nil
+    end
 
-  it 'setups user_name configuration' do
-    described_class.config.user_name = 'user@name.com'
-  end
+    it 'returns nil for password' do
+      expect(described_class.config.password).to eq nil
+    end
 
-  it 'setups password configuration' do
-    described_class.config.password = 'password'
-  end
-
-  it 'setups logger configuration' do
-    described_class.config.logger = double
+    it 'returns nil for logger' do
+      expect(described_class.config.logger).to eq nil
+    end
   end
 end

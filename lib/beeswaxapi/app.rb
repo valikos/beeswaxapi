@@ -2,16 +2,15 @@ module BeeswaxAPI
   class App
     extend Dry::Configurable
 
-    # basic_auth:        turns on basic auth for client
-    # cookie_auth:       turns cookies auth for client
+    # auth_strategy:     set auth method for api
+    #                    "basic" or "cookies"
     # cookie_file:       path where to store cookie
     # base_uri:          base url for api
     # user_name:         user email
     # password:          user password
-    # logger:            inject logger      
+    # logger:            inject logger
 
-    setting :basic_auth, false 
-    setting :cookie_auth, false
+    setting :auth_strategy, 'basic'
     setting :cookie_file
     setting :base_uri
     setting :user_name

@@ -23,6 +23,8 @@ module BeeswaxAPI
       request_for(opts, &block)
     end
 
+    private
+
     def request_for(**opts)
       # TODO: better url constructor
       target_url = [App.config.base_uri, @path].join('/')
@@ -31,17 +33,28 @@ module BeeswaxAPI
         target_url = [target_url, opts.delete(:path)].join('/')
       end
 
-      # configure basic auth request
-      if App.config.basic_auth
+      case App.config.auth_strategy
+      when 'basic'
         userpwd = "#{App.config.user_name}:#{App.config.password}"
         opts[:userpwd] = userpwd
-      end
+      when 'cookies'
+        cookie_file_path = App.config.cookie_file
 
-      # configure cookie request
-      if App.config.cookie_auth
+        if cookie_file_path.nil? || cookie_file_path.empty?
+          fail(
+            Errors::MissingConfiguration,
+            "Path to cookies is missed. Please check configuration."
+          )
+        end
+
         opts = opts.merge(
           cookiefile: App.config.cookie_file,
           cookiejar: App.config.cookie_file
+        )
+      else
+        fail(
+          Errors::MissingConfiguration,
+          "Authencation strategy can't be missed. Please check configuration."
         )
       end
 
@@ -66,13 +79,13 @@ module BeeswaxAPI
           return timed_out_response_handler(response)
         elsif response.code >= 400 && response.code < 500
           return failure_response_handler(response)
+        elsif response.code >= 500 && response.code
+          return failure_response_handler(response)
         end
       end
 
       request.run
     end
-
-    private
 
     # TODO: improve heredoc formatting
     def before_request_log(target_url, opts)

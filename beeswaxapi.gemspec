@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Beeswax.com rest api client}
   spec.description   = %q{Simple ruby client to work with beeswax buzz api}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/valikos/beeswaxapi"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "typhoeus", "~> 1.3"
   spec.add_dependency "dry-types", "~> 0.12.2"
   spec.add_dependency "dry-struct", "~> 0.4.0"
-  spec.add_dependency "dry-configurable", "~> 0.7.0"  
+  spec.add_dependency "dry-configurable", "~> 0.7.0"
   spec.add_dependency "yajl-ruby", "~> 1.3", ">= 1.3.1"
 
   spec.add_development_dependency "bundler", "~> 1.16"

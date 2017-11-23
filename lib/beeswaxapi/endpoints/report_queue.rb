@@ -8,10 +8,10 @@ module BeeswaxAPI
 
         # NOTE: get method returns document in body
         if origin_response.request.options[:method] == :get
-          if parsed_response_body.key? :payload
-            Response.new(parsed_response_body)
-          else
+          if parsed_response_body.is_a?(Array)
             Response.new(payload: parsed_response_body)
+          else
+            Response.new(parsed_response_body)
           end
         else
           Response.new(parsed_response_body)

@@ -3,24 +3,24 @@ require 'yajl'
 
 module BeeswaxAPI
   module Request
-    def retrieve(**opts, &block)
+    def retrieve(**opts)
       opts[:method] = :get
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def create(**opts, &block)
+    def create(**opts)
       opts[:method] = :post
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def update(**opts, &block)
+    def update(**opts)
       opts[:method] = :put
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def delete(**opts, &block)
+    def delete(**opts)
       opts[:method] = :delete
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
     private

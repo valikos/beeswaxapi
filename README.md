@@ -1,5 +1,11 @@
 # Beeswaxapi
 
+## Supported Ruby versions
+
+This library officially supports the following Ruby versions:
+
+* MRI `>= 2.7.0`
+
 This gem is a wrapper for Beeswax Buzz API.
 
 ## Installation

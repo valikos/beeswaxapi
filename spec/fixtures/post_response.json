@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "message": "campaign created with ID = 1",
+  "payload": {
+    "id": 1
+  }
+}

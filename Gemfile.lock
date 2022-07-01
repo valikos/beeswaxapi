@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    beeswaxapi (0.0.11)
+    beeswaxapi (0.0.12)
       dry-configurable (~> 0.15.0)
       dry-struct (~> 1.4.0)
       dry-types (~> 1.5.0)

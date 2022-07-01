@@ -10,7 +10,7 @@ module BeeswaxAPI
     # password:          user password
     # logger:            inject logger
 
-    setting :auth_strategy, 'basic'
+    setting :auth_strategy, default: 'basic'
     setting :cookie_file
     setting :base_uri
     setting :user_name

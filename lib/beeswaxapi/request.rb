@@ -59,9 +59,8 @@ module BeeswaxAPI
       end
 
       if opts.has_key? :body_params
-        opts[:body] = Yajl.dump(opts.delete(:body_params))
+        opts[:body] = opts.delete(:body_params)
       end
-
       request = Typhoeus::Request.new(target_url, opts)
 
       if App.config.logger
@@ -83,7 +82,6 @@ module BeeswaxAPI
           return failure_response_handler(response)
         end
       end
-
       request.run
     end
 

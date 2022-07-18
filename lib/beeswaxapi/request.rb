@@ -59,7 +59,12 @@ module BeeswaxAPI
       end
 
       if opts.has_key? :body_params
-        opts[:body] = opts.delete(:body_params)
+        body = opts.delete(:body_params)
+        opts[:body] = Yajl.dump(body)
+      elsif opts.has_key? :body_file
+        # in case of uploading files we shouldn't convert it to JSON
+        # BeeswaxAPI::HtmlAsset::Upload.create(body_file: {creative_content: @file}, path: create_id)
+        opts[:body] = opts.delete(:body_file)
       end
       request = Typhoeus::Request.new(target_url, opts)
 

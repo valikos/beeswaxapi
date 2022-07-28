@@ -69,7 +69,35 @@ RSpec.describe BeeswaxAPI::Request do
 
       it 'return response' do
         response = BeeswaxAPI::Demo.create
+        expect(response.success).to be true
+        expect(response.code).to be 200
       end
+    end
+  end
+
+  context 'unauthorized request' do
+    before do
+      BeeswaxAPI::App.configure do |c|
+        c.base_uri = "www.example.com"
+      end
+      response = Typhoeus::Response.new(code: 401, body: fixture)
+      Typhoeus.stub('www.example.com/').and_return(response)
+    end
+
+    let(:fixture) {
+      "{
+        \"success\": false,
+        \"message\": \"Request not processed, API error\",
+        \"errors\": [
+          \"ERROR: User cannot be authenticated\"
+        ]
+      }"
+    }
+    it 'returns response' do
+      response = BeeswaxAPI::Demo.retrieve
+      expect(response.success).to be false
+      expect(response.code).to be 401
+      expect(response).to be_unauthorized
     end
   end
 
@@ -98,6 +126,7 @@ RSpec.describe BeeswaxAPI::Request do
         it 'returns response' do
           response = BeeswaxAPI::Demo.retrieve
           expect(response.success).to be false
+          expect(response.code).to be 400
         end
       end
     end

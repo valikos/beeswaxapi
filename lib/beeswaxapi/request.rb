@@ -78,13 +78,13 @@ module BeeswaxAPI
         end
 
         if response.success?
-          success_response_handler(response)
+          success_response_handler(body: response.body, code: response.code)
         elsif response.timed_out?
-          timed_out_response_handler(response)
+          timed_out_response_handler(body: response.body, code: response.code)
         elsif response.code >= 400 && response.code < 500
-          failure_response_handler(response)
+          failure_response_handler(body: response.body, code: response.code)
         elsif response.code >= 500 && response.code
-          failure_response_handler(response)
+          failure_response_handler(body: response.body, code: response.code)
         else
           @response = Response.new(errors: ["No response received"], success: false)
           @response.expection = Errors::FailureResponse.new(errors: ["Response code is 0"])
@@ -115,17 +115,22 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
       Yajl.load(body, symbolize_keys: true)
     end
 
-    def success_response_handler(origin_response)
-      @response = Response.new(parsed_body(origin_response.body))
+    def success_response_handler(body:, code:)
+      @response = Response.new(parsed_body(body).merge({code: code}))
     end
 
-    def failure_response_handler(origin_response)
-      @response = Response.new(parsed_body(origin_response.body))
-      @response.expection = Errors::FailureResponse.new(errors: @response.errors)
+    def failure_response_handler(body:, code:)
+      @response = Response.new(parsed_body(body).merge({code: code}))
+      @response.expection =
+        if code == 401
+          Errors::UnauthorizedResponse.new(errors: @response.errors)
+        else
+          Errors::FailureResponse.new(errors: @response.errors)
+        end
     end
 
-    def timed_out_response_handler(origin_response)
-      @response = Response.new(success: false)
+    def timed_out_response_handler(code:)
+      @response = Response.new(success: false, code: code)
       @response.expection = Errors::TimedOutRequest.new, 'Request skipped by time out'
     end
   end

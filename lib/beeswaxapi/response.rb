@@ -1,5 +1,6 @@
 module BeeswaxAPI
   class Response < Dry::Struct
+    attr_accessor :expection
 
     attribute :success?, Types::Bool
     attribute :message?, Types::String.optional

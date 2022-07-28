@@ -78,16 +78,21 @@ module BeeswaxAPI
         end
 
         if response.success?
-          return success_response_handler(response)
+          success_response_handler(response)
         elsif response.timed_out?
-          return timed_out_response_handler(response)
+          timed_out_response_handler(response)
         elsif response.code >= 400 && response.code < 500
-          return failure_response_handler(response)
+          failure_response_handler(response)
         elsif response.code >= 500 && response.code
-          return failure_response_handler(response)
+          failure_response_handler(response)
+        else
+          @response = Response.new(errors: ["No response received"], success: false)
+          @response.expection = Errors::FailureResponse.new(errors: ["Response code is 0"])
         end
       end
       request.run
+      fail @response.expection if @response.expection && App.config.raise_exception_on_bad_response
+      @response
     end
 
     # TODO: improve heredoc formatting
@@ -111,16 +116,17 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
     end
 
     def success_response_handler(origin_response)
-      Response.new(parsed_body(origin_response.body))
+      @response = Response.new(parsed_body(origin_response.body))
     end
 
     def failure_response_handler(origin_response)
-      response = Response.new(parsed_body(origin_response.body))
-      fail Errors::FailureResponse.new(errors: response.errors)
+      @response = Response.new(parsed_body(origin_response.body))
+      @response.expection = Errors::FailureResponse.new(errors: @response.errors)
     end
 
     def timed_out_response_handler(origin_response)
-      fail Errors::TimedOutRequest.new, 'Request skipped by time out'
+      @response = Response.new(success: false)
+      @response.expection = Errors::TimedOutRequest.new, 'Request skipped by time out'
     end
   end
 end

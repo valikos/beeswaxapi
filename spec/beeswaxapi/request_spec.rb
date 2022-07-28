@@ -72,4 +72,48 @@ RSpec.describe BeeswaxAPI::Request do
       end
     end
   end
+
+  context 'bad request' do
+    before do
+      BeeswaxAPI::App.configure do |c|
+        c.base_uri = "www.example.com"
+      end
+      response = Typhoeus::Response.new(code: 400, body: fixture)
+      Typhoeus.stub('www.example.com/').and_return(response)
+    end
+
+    let(:fixture) {
+      "{
+        \"success\": false,
+        \"message\": \"Request not processed, API error\",
+        \"errors\": [
+          \"ERROR: User cannot be authenticated\"
+        ]
+      }"
+    }
+
+    context "raise_exception_on_bad_response is false" do
+      context 'get request' do
+
+        it 'returns response' do
+          response = BeeswaxAPI::Demo.retrieve
+          expect(response.success).to be false
+        end
+      end
+    end
+
+    context "raise_exception_on_bad_response is true" do
+      before do
+        BeeswaxAPI::App.configure do |c|
+          c.raise_exception_on_bad_response = true
+        end
+      end
+      context 'get request' do
+
+        it 'raises an error' do
+          expect { BeeswaxAPI::Demo.retrieve }.to raise_error(BeeswaxAPI::Errors::FailureResponse)
+        end
+      end
+    end
+  end
 end

@@ -16,5 +16,6 @@ module BeeswaxAPI
     setting :user_name
     setting :password
     setting :logger
+    setting :raise_exception_on_bad_response, default: false
   end
 end

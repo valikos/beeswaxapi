@@ -1,7 +1,7 @@
 RSpec.describe BeeswaxAPI::App do
   %i[
     auth_strategy cookie_file base_uri
-    user_name password logger
+    user_name password logger raise_exception_on_bad_response
   ].each do |config|
     it "contains #{config} config option" do
       expect(described_class.settings).to include config
@@ -31,6 +31,10 @@ RSpec.describe BeeswaxAPI::App do
 
     it 'returns nil for logger' do
       expect(described_class.config.logger).to eq nil
+    end
+
+    it 'returns false for raise_exception_on_bad_response' do
+      expect(described_class.config.raise_exception_on_bad_response).to eq false
     end
   end
 end

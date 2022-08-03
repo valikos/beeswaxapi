@@ -83,7 +83,7 @@ module BeeswaxAPI
           timed_out_response_handler(body: response.body, code: response.code)
         elsif response.code >= 400 && response.code < 500
           failure_response_handler(body: response.body, code: response.code)
-        elsif response.code >= 500 && response.code
+        elsif response.code >= 500
           failure_response_handler(body: response.body, code: response.code)
         else
           @response = Response.new(errors: ["No response received"], success: false)

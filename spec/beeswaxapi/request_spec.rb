@@ -1,12 +1,13 @@
 RSpec.describe BeeswaxAPI::Request do
+  class BeeswaxAPI::Demo < BeeswaxAPI::Endpoint
+  end
+
   context 'when missing auth_strategy' do
     before do
       BeeswaxAPI::App.configure do |c|
         c.auth_strategy = 'something else'
       end
 
-      class BeeswaxAPI::Demo < BeeswaxAPI::Endpoint
-      end
     end
 
     after do
@@ -56,21 +57,42 @@ RSpec.describe BeeswaxAPI::Request do
       Typhoeus.stub('www.example.com/').and_return(response)
     end
 
-    context 'get request' do
-      let(:fixture) { File.read("./spec/fixtures/api_respons.json") }
+    context "v1" do
+      context 'get request' do
+        let(:fixture) { File.read("./spec/fixtures/api_respons.json") }
 
-      it 'return response' do
-        response = BeeswaxAPI::Demo.retrieve
+        it 'return response' do
+          response = BeeswaxAPI::Demo.retrieve
+        end
+      end
+
+      context 'post request' do
+        let(:fixture) { File.read("./spec/fixtures/post_response.json") }
+
+        it 'return response' do
+          response = BeeswaxAPI::Demo.create
+          expect(response.success).to be true
+          expect(response.code).to be 200
+        end
       end
     end
 
-    context 'post request' do
-      let(:fixture) { File.read("./spec/fixtures/post_response.json") }
+    context "v2" do
+      before do
+        response = Typhoeus::Response.new(code: 200, body: fixture)
+        Typhoeus.stub('www.example.com/v2/something').and_return(response)
+      end
 
-      it 'return response' do
-        response = BeeswaxAPI::Demo.create
-        expect(response.success).to be true
-        expect(response.code).to be 200
+      class BeeswaxAPI::Demo2 < BeeswaxAPI::Endpoint
+        path :"v2/something"
+      end
+      context 'get request' do
+        let(:fixture) { File.read("./spec/fixtures/api_response_v2_list.json") }
+
+        it 'return response' do
+          response = BeeswaxAPI::Demo2.retrieve
+          expect(response.payload).not_to be_empty
+        end
       end
     end
   end
@@ -93,6 +115,7 @@ RSpec.describe BeeswaxAPI::Request do
         ]
       }"
     }
+
     it 'returns response' do
       response = BeeswaxAPI::Demo.retrieve
       expect(response.success).to be false

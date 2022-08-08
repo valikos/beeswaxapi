@@ -5,10 +5,12 @@ module BeeswaxAPI
     extend Request
 
     class << self
-      # attr_reader :path
-      
       def path(value)
         @path = value
+      end
+
+      def v2?
+        @path.to_s.include?("v2")
       end
     end
   end

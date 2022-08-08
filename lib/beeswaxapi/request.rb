@@ -116,7 +116,18 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
     end
 
     def success_response_handler(body:, code:)
-      @response = Response.new(parsed_body(body).merge({code: code}))
+      body = parsed_body(body)
+      response =
+        if v2?
+          if body[:results]
+             {success: true, code: code, payload: body[:results]}
+           else
+             {success: true, code: code, payload: body}
+           end
+        else
+          body.merge({code: code})
+        end
+      @response = Response.new(response)
     end
 
     def failure_response_handler(body:, code:)

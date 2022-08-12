@@ -59,16 +59,17 @@ module BeeswaxAPI
       end
 
       if opts.has_key? :body_params
+        opts[:headers] = {"Content-Type" => "application/json"}
         body = opts.delete(:body_params)
         opts[:body] = Yajl.dump(body)
       elsif opts.has_key? :body_file
+        opts[:headers] = {"Content-Type" => "multipart/form-data"}
         # in case of uploading files we shouldn't convert it to JSON
         # BeeswaxAPI::HtmlAsset::Upload.create(body_file: {creative_content: @file}, path: create_id)
         opts[:body] = opts.delete(:body_file)
       end
 
       # critical for API v2
-      opts[:headers] = {"Content-Type" => "application/json"}
 
       request = Typhoeus::Request.new(target_url, opts)
 

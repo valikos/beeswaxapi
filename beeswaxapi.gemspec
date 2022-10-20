@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "typhoeus", "~> 1.4"
   spec.add_dependency "dry-types", "~> 1.5.0"
   spec.add_dependency "dry-struct", "~> 1.4.0"
+  spec.add_dependency "dry-logic", "~> 1.2.0"
   spec.add_dependency "dry-configurable", "~> 0.15.0"
   spec.add_dependency "yajl-ruby", "~> 1.3", ">= 1.3.1"
 

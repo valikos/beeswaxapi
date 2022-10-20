@@ -8,6 +8,8 @@ module BeeswaxAPI
       end
 
       def to_s
+        return unless errors
+
         errors.join(', ')
       end
     end

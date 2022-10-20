@@ -125,10 +125,10 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
       response =
         if v2?
           if body[:results]
-             {success: true, code: code, payload: body[:results]}
-           else
-             {success: true, code: code, payload: body}
-           end
+            {success: true, code: code, payload: body[:results]}
+          else
+            {success: true, code: code, payload: body}
+          end
         else
           body.merge({code: code})
         end

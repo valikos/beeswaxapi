@@ -160,10 +160,53 @@ RSpec.describe BeeswaxAPI::Request do
           c.raise_exception_on_bad_response = true
         end
       end
-      context 'get request' do
 
+      after do
+        BeeswaxAPI::App.configure do |c|
+          c.raise_exception_on_bad_response = false
+        end
+      end
+
+      context 'get request' do
         it 'raises an error' do
           expect { BeeswaxAPI::Demo.retrieve }.to raise_error(BeeswaxAPI::Errors::FailureResponse)
+        end
+      end
+    end
+  end
+
+  context '5xx errors' do
+    before do
+      BeeswaxAPI::App.configure do |c|
+        c.base_uri = "www.example.com"
+      end
+      response = Typhoeus::Response.new(code: 500, body: fixture)
+      Typhoeus.stub('www.example.com/').and_return(response)
+    end
+
+    context "raise_exception_on_bad_response is false" do
+      let(:fixture) {
+        "Server error: 500"
+      }
+      context 'get request' do
+
+        it 'returns response' do
+          response = BeeswaxAPI::Demo.retrieve
+          expect(response.success).to be false
+          expect(response.code).to be 500
+        end
+      end
+    end
+
+    context "raise_exception_on_bad_response is false and empty body" do
+      let(:fixture) { nil }
+
+      context 'get request' do
+
+        it 'returns response' do
+          response = BeeswaxAPI::Demo.retrieve
+          expect(response.success).to be false
+          expect(response.code).to be 500
         end
       end
     end

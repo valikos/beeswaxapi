@@ -118,6 +118,8 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
 
     def parsed_body(body)
       Yajl.load(body, symbolize_keys: true)
+    rescue Yajl::ParseError
+      {body: body, success: false}
     end
 
     def success_response_handler(body:, code:)
@@ -136,7 +138,11 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
     end
 
     def failure_response_handler(body:, code:)
-      @response = Response.new(parsed_body(body).merge({code: code}))
+      @response = if body
+                    Response.new(parsed_body(body).merge({code: code}))
+                  else
+                    Response.new({success: false, code: code})
+                  end
       @response.expection =
         if code == 401
           Errors::UnauthorizedResponse.new(errors: @response.errors)

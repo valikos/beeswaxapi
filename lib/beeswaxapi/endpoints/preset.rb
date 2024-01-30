@@ -1,5 +1,5 @@
 module BeeswaxAPI
   class Preset < Endpoint
-    path :"v2/preset"
+    path :"v2/presets"
   end
 end

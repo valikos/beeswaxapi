@@ -89,7 +89,7 @@ Beeswax Buzz API: [https://docs.beeswax.com/docs]
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/beeswaxapi.
+This repo is a fork of https://github.com/valikos/beeswaxapi. When creating PRs, make sure you're adding them to the correct repo.
 
 ## License
 

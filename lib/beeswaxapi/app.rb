@@ -10,11 +10,12 @@ module BeeswaxAPI
     # password:          user password
     # logger:            inject logger
 
-    setting :auth_strategy, 'basic'
+    setting :auth_strategy, default: 'basic'
     setting :cookie_file
     setting :base_uri
     setting :user_name
     setting :password
     setting :logger
+    setting :raise_exception_on_bad_response, default: false
   end
 end

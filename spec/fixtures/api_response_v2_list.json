@@ -1,0 +1,68 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 34600,
+            "modules": {
+                "geo": {
+                    "all": {
+                        "country": {
+                            "any": [
+                                {
+                                    "comparator": "equals",
+                                    "value": "DEU"
+                                }
+                            ]
+                        },
+                        "region": {
+                            "any": [
+                                {
+                                    "comparator": "equals",
+                                    "value": "DEU/BE"
+                                }
+                            ]
+                        }
+                    },
+                    "any": {},
+                    "none": {}
+                },
+                "exchange": {
+                    "all": {
+                        "inventory_source": {
+                            "any": [
+                                {
+                                    "comparator": "equals",
+                                    "value": "ame"
+                                },
+                                {
+                                    "comparator": "equals",
+                                    "value": "adx"
+                                },
+                                {
+                                    "comparator": "equals",
+                                    "value": "ap"
+                                },
+                                {
+                                    "comparator": "equals",
+                                    "value": "uty"
+                                }
+                            ]
+                        }
+                    },
+                    "any": {},
+                    "none": {}
+                }
+            },
+            "create_date": "2022-08-04 07:31:53",
+            "update_date": "2022-08-05 04:18:15",
+            "active": true,
+            "alternative_id": null,
+            "notes": null,
+            "name": null,
+            "guaranteed": false,
+            "account_id": 106
+        }
+    ]
+}

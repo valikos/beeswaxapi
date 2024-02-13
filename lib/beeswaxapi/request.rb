@@ -3,24 +3,24 @@ require 'yajl'
 
 module BeeswaxAPI
   module Request
-    def retrieve(**opts, &block)
+    def retrieve(**opts)
       opts[:method] = :get
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def create(**opts, &block)
+    def create(**opts)
       opts[:method] = :post
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def update(**opts, &block)
+    def update(**opts)
       opts[:method] = :put
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
-    def delete(**opts, &block)
+    def delete(**opts)
       opts[:method] = :delete
-      request_for(opts, &block)
+      request_for(**opts)
     end
 
     private
@@ -59,8 +59,17 @@ module BeeswaxAPI
       end
 
       if opts.has_key? :body_params
-        opts[:body] = Yajl.dump(opts.delete(:body_params))
+        opts[:headers] = {"Content-Type" => "application/json"}
+        body = opts.delete(:body_params)
+        opts[:body] = Yajl.dump(body)
+      elsif opts.has_key? :body_file
+        opts[:headers] = {"Content-Type" => "multipart/form-data"}
+        # in case of uploading files we shouldn't convert it to JSON
+        # BeeswaxAPI::HtmlAsset::Upload.create(body_file: {creative_content: @file}, path: create_id)
+        opts[:body] = opts.delete(:body_file)
       end
+
+      # critical for API v2
 
       request = Typhoeus::Request.new(target_url, opts)
 
@@ -74,17 +83,21 @@ module BeeswaxAPI
         end
 
         if response.success?
-          return success_response_handler(response)
+          success_response_handler(body: response.body, code: response.code)
         elsif response.timed_out?
-          return timed_out_response_handler(response)
+          timed_out_response_handler(body: response.body, code: response.code)
         elsif response.code >= 400 && response.code < 500
-          return failure_response_handler(response)
-        elsif response.code >= 500 && response.code
-          return failure_response_handler(response)
+          failure_response_handler(body: response.body, code: response.code)
+        elsif response.code >= 500
+          failure_response_handler(body: response.body, code: response.code)
+        else
+          @response = Response.new(errors: ["No response received"], success: false)
+          @response.expection = Errors::FailureResponse.new(errors: ["Response code is 0"])
         end
       end
-
       request.run
+      fail @response.expection if @response.expection && App.config.raise_exception_on_bad_response
+      @response
     end
 
     # TODO: improve heredoc formatting
@@ -105,19 +118,42 @@ Finish request #{opts[:method].upcase} #{target_url} with #{response.code}
 
     def parsed_body(body)
       Yajl.load(body, symbolize_keys: true)
+    rescue Yajl::ParseError
+      {body: body, success: false}
     end
 
-    def success_response_handler(origin_response)
-      Response.new(parsed_body(origin_response.body))
+    def success_response_handler(body:, code:)
+      body = parsed_body(body)
+      response =
+        if v2?
+          if body[:results]
+            {success: true, code: code, payload: body[:results]}
+          else
+            {success: true, code: code, payload: body}
+          end
+        else
+          body.merge({code: code})
+        end
+      @response = Response.new(response)
     end
 
-    def failure_response_handler(origin_response)
-      response = Response.new(parsed_body(origin_response.body))
-      fail Errors::FailureResponse.new(errors: response.errors)
+    def failure_response_handler(body:, code:)
+      @response = if body
+                    Response.new(parsed_body(body).merge({code: code}))
+                  else
+                    Response.new({success: false, code: code})
+                  end
+      @response.expection =
+        if code == 401
+          Errors::UnauthorizedResponse.new(errors: @response.errors)
+        else
+          Errors::FailureResponse.new(errors: @response.errors)
+        end
     end
 
-    def timed_out_response_handler(origin_response)
-      fail Errors::TimedOutRequest.new, 'Request skipped by time out'
+    def timed_out_response_handler(code:)
+      @response = Response.new(success: false, code: code)
+      @response.expection = Errors::TimedOutRequest.new, 'Request skipped by time out'
     end
   end
 end

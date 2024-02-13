@@ -1,5 +1,11 @@
 # Beeswaxapi
 
+## Supported Ruby versions
+
+This library officially supports the following Ruby versions:
+
+* MRI `>= 2.7.0`
+
 This gem is a wrapper for Beeswax Buzz API.
 
 ## Installation
@@ -35,7 +41,7 @@ Available configs:
 
 Example configuration for basic auth authentication:
 
-```
+```ruby
 BeeswaxAPI::App.configure do |config|
   config.auth_strategy = 'basic'
   config.base_uri      = 'https://sandbox.api.beeswax.com/rest'
@@ -46,7 +52,7 @@ end
 
 Example configuration for cookies authentication:
 
-```
+```ruby
 BeeswaxAPI::App.configure do |config|
   config.auth_strategy = 'cookies'
   config.cookie_file   = '/path/to/cookies-file.txt'
@@ -54,6 +60,21 @@ BeeswaxAPI::App.configure do |config|
   config.user_name     = 'user@mail.com'
   config.password      = 'password'
 end
+```
+
+Example of use:
+
+```ruby
+  params = {
+    advertiser_id: ENV["BEESWAX_ADVERTISER_ID"].to_i,
+    creative_asset_name: file_name.html,
+    size_in_bytes: 12001,
+    notes: "Created by API",
+    active: false
+  }
+  BeeswaxAPI::Campaign.create(body_params: params)
+  # if you need to upload asset you should use `body_file` key
+  BeeswaxAPI::HtmlAsset::Upload.create(body_file: {creative_content: @file}, path: create_id) # `path` will be added to url: base_uri/rest/html_asset/upload/<path>
 ```
 
 ## Development
@@ -68,7 +89,7 @@ Beeswax Buzz API: [https://docs.beeswax.com/docs]
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/beeswaxapi.
+This repo is a fork of https://github.com/valikos/beeswaxapi. When creating PRs, make sure you're adding them to the correct repo.
 
 ## License
 

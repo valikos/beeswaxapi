@@ -1,0 +1,101 @@
+{
+    "success": true,
+    "payload": [
+        {
+            "advertiser_id": 270,
+            "bid_modifier_id": null,
+            "budget_type": 0,
+            "campaign_budget": 100,
+            "campaign_id": 2171,
+            "campaign_name": "Test",
+            "campaign_spend": 0,
+            "continents": [
+                "NAM"
+            ],
+            "currency": "USD",
+            "daily_budget": 50,
+            "default_line_item_preset_id": null,
+            "default_targeting_preset_id": null,
+            "delivery_modifier_id": null,
+            "end_date": "2021-05-04 23:59:59",
+            "frequency_cap": [
+                {
+                    "impressions": 2,
+                    "duration": 86400
+                }
+            ],
+            "frequency_cap_vendor": null,
+            "frequency_cap_type": 0,
+            "last_active": null,
+            "min_bid": null,
+            "max_bid": null,
+            "pacing": 0,
+            "revenue_amount": null,
+            "revenue_type": null,
+            "segment_extension_default": null,
+            "segment_extension_type_default": null,
+            "segment_extension_vendors_default": [],
+            "start_date": "2021-05-03 00:00:00",
+            "test_plan_id": null,
+            "experiment_id_type": null,
+            "experiment_id_vendor_id": null,
+            "account_id": 106,
+            "create_date": "2021-04-27 05:22:18",
+            "update_date": "2021-04-27 05:22:55",
+            "alternative_id": null,
+            "notes": null,
+            "active": false,
+            "buzz_key": "demosbx",
+            "push_status": 0,
+            "push_update": 1
+        },
+        {
+            "advertiser_id": 270,
+            "bid_modifier_id": null,
+            "budget_type": 0,
+            "campaign_budget": 10,
+            "campaign_id": 18247,
+            "campaign_name": "Novakid 2022",
+            "campaign_spend": 0,
+            "continents": [
+                "NAM"
+            ],
+            "currency": "USD",
+            "daily_budget": null,
+            "default_line_item_preset_id": null,
+            "default_targeting_preset_id": null,
+            "delivery_modifier_id": null,
+            "end_date": null,
+            "frequency_cap": [],
+            "frequency_cap_vendor": null,
+            "frequency_cap_type": null,
+            "last_active": null,
+            "min_bid": null,
+            "max_bid": null,
+            "pacing": 0,
+            "revenue_amount": null,
+            "revenue_type": null,
+            "segment_extension_default": null,
+            "segment_extension_type_default": null,
+            "segment_extension_vendors_default": [],
+            "start_date": "2022-10-01 00:00:00",
+            "test_plan_id": null,
+            "experiment_id_type": null,
+            "experiment_id_vendor_id": null,
+            "account_id": 106,
+            "create_date": "2022-06-24 11:33:50",
+            "update_date": "2022-06-24 11:33:50",
+            "alternative_id": null,
+            "notes": null,
+            "active": false,
+            "buzz_key": "demosbx",
+            "push_status": 0,
+            "push_update": 1
+        }
+    ],
+    "errors": [
+        "WARNING: Field email is not present in this object",
+        "WARNING: Field password is not present in this object"
+    ]
+}
+

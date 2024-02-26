@@ -1,10 +1,8 @@
 RSpec.describe BeeswaxAPI::App do
-  %i[
-    auth_strategy cookie_file base_uri
-    user_name password logger raise_exception_on_bad_response
-  ].each do |config|
-    it "contains #{config} config option" do
-      expect(described_class.settings).to include config
+  describe 'config' do
+    it 'contains all the config options' do
+      expect(described_class.config.to_h.keys)
+        .to match_array (%i[ auth_strategy cookie_file base_uri user_name password logger raise_exception_on_bad_response ])
     end
   end
 
